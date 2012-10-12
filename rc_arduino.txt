@@ -1,0 +1,51 @@
+#define FORWARD_PIN 1
+#define REVERSE_PIN 2
+#define LEFT_PIN 3
+#define RIGHT_PIN 4
+
+void forward()
+{
+    directional_pins_off();
+    digitalWrite(FORWARD_PIN, HIGH);
+}
+
+void reverse()
+{
+    directional_pins_off();
+    digitalWrite(REVERSE_PIN, HIGH);
+}
+
+void left()
+{
+    directional_pins_off();
+    digitalWrite(LEFT_PIN, HIGH);
+}
+
+void right()
+{
+    directional_pins_off();
+    digitalWrite(RIGHT_PIN, HIGH);
+}
+
+void directional_pins_off()
+{
+    digitalWrite(FORWARD_PIN, LOW);
+    digitalWrite(REVERSE_PIN, LOW);
+    digitalWrite(LEFT_PIN, LOW);
+    digitalWrite(RIGHT_PIN, LOW);
+}
+
+void setup()
+{
+    pinMode(FORWARD_PIN, OUTPUT);
+    pinMode(REVERSE_PIN, OUTPUT);
+    pinMode(LEFT_PIN, OUTPUT);
+    pindMode(RIGHT_PIN, OUTPUT);
+
+    directional_pins_off();
+}
+
+void loop()
+{}
+
+
