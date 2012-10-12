@@ -5,25 +5,25 @@
 
 void forward()
 {
-    directional_pins_off();
+    digitalWrite(REVERSE_PIN, LOW);
     digitalWrite(FORWARD_PIN, HIGH);
 }
 
 void reverse()
 {
-    directional_pins_off();
+    digitalWrite(FORWARD_PIN, LOW);
     digitalWrite(REVERSE_PIN, HIGH);
 }
 
 void left()
 {
-    directional_pins_off();
+    digitalWrite(RIGHT_PIN, LOW);
     digitalWrite(LEFT_PIN, HIGH);
 }
 
 void right()
 {
-    directional_pins_off();
+    digitalWrite(LEFT_PIN, LOW);
     digitalWrite(RIGHT_PIN, HIGH);
 }
 
