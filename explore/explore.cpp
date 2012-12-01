@@ -1,5 +1,9 @@
 #include "explore.h"
 
+extern char *grid = NULL;
+extern uint8_t curr_x = X_START;
+extern uint8_t curr_y = Y_START;
+
 void initialize_grid()
 {
     // *4 because we could be starting anywhere in the grid, and this covers it so that we can go at least EXPLORE_RADIUS in any direction
