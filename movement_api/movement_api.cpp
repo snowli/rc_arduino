@@ -53,6 +53,14 @@ static double getHeading() {
   }
 }
 
+static void directional_pins_off()
+{
+    digitalWrite(FORWARD_PIN, LOW);
+    digitalWrite(REVERSE_PIN, LOW);
+    digitalWrite(LEFT_PIN, LOW);
+    digitalWrite(RIGHT_PIN, LOW);
+}
+
 static void forward()
 {
     directional_pins_off();
@@ -75,14 +83,6 @@ static void right()
 {
     directional_pins_off();
     digitalWrite(RIGHT_PIN, HIGH);
-}
-
-static void directional_pins_off()
-{
-    digitalWrite(FORWARD_PIN, LOW);
-    digitalWrite(REVERSE_PIN, LOW);
-    digitalWrite(LEFT_PIN, LOW);
-    digitalWrite(RIGHT_PIN, LOW);
 }
 
 /*
@@ -110,6 +110,31 @@ void unitReverse()
   delay(100);
   directional_pins_off();
   delay(1000);
+}
+
+/*
+Straightens the wheels after a left turn
+
+@todo
+-Guarantee that the wheel are straight using compass
+*/
+static void straightenFromLeft()
+{
+  directional_pins_off();
+  right();
+  delay(40);
+  directional_pins_off();   
+}
+
+/*
+Straightens the wheels after a right turn
+*/
+static void straightenFromRight()
+{
+  directional_pins_off();
+  left();
+  delay(40);
+  directional_pins_off();   
 }
 
 
@@ -180,30 +205,5 @@ boolean rotate(int degree)
   }
   
   return true;
-}
-
-/*
-Straightens the wheels after a left turn
-
-@todo
--Guarantee that the wheel are straight using compass
-*/
-static void straightenFromLeft()
-{
-  directional_pins_off();
-  right();
-  delay(40);
-  directional_pins_off();   
-}
-
-/*
-Straightens the wheels after a right turn
-*/
-static void straightenFromRight()
-{
-  directional_pins_off();
-  left();
-  delay(40);
-  directional_pins_off();   
 }
 

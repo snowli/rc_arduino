@@ -17,22 +17,14 @@ Prototype Movement API. Provide rotate, unitForward, unitReverse.
 #define ROTATE_ALLOWABLE_MARGIN 20
 
 #include <Arduino.h>
-#include <Wire.h>
+#include "/usr/share/arduino/libraries/Wire/Wire.h"
 
 //Compass hardware address
 //The Wire library uses 7-bit I2C addressing, rather than 8-bits
 const char compassAddr = 0x42>>1;
 
-static double getHeading();
-static void forward();
-static void reverse()
-static void left()
-static void right()
-static void directional_pins_off()
-void unitForward() 
-void unitReverse()
-boolean rotate(int degree)
-static void straightenFromLeft()
-static void straightenFromRight()
+void unitForward();
+void unitReverse();
+boolean rotate(int degree);
 
 #endif
