@@ -12,6 +12,9 @@ Prototype Movement API. Provide rotate, unitForward, unitReverse.
 ROTATE_LEFT_COMPLETE -- User input to specify when a manual left rotation is complete. The input should be low when the rotation is complete.
 LEFT_LED -- Indicates the car is requesting a left rotate
 */
+#include <Arduino.h>
+#include <Wire.h>
+
 #define FORWARD_PIN 4
 #define REVERSE_PIN 5
 #define LEFT_PIN 6
@@ -25,8 +28,6 @@ LEFT_LED -- Indicates the car is requesting a left rotate
 //whenever a rotation is required.
 #define MANUAL_ROTATE
 
-#include <Arduino.h>
-#include <Wire.h>
 
 //Compass hardware address
 //The Wire library uses 7-bit I2C addressing, rather than 8-bits
