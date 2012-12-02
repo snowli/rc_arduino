@@ -3,13 +3,13 @@
 #ifndef _EXPLORE_H_
 #define _EXPLORE_H_
 
-#define EXPLORE_RADIUS 2 
+#define EXPLORE_RADIUS 5 
 #define BLOCK_SIZE 1
 #define STEP_SIZE 1
 #define UNITS_PER_STEP 1
 
-#define X_START 2
-#define Y_START 2
+#define X_START EXPLORE_RADIUS 
+#define Y_START EXPLORE_RADIUS
 
 #include <Arduino.h>
 #include <movement_api.h>
