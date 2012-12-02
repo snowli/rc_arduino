@@ -1,9 +1,16 @@
-// note: during exploration, default is to always begin in grid quadrant 1 
+/*
+@author Snow Li
+@date 12-1-12
+
+Header file defining the parameters of the virtual grid which the rc_car will logically explore
+
+during exploration, default is to always begin in grid quadrant 1 i.e. x = EXPLORE_RADIUS and y = EXPLORE_RADIUS
+*/
 
 #ifndef _EXPLORE_H_
 #define _EXPLORE_H_
 
-#define EXPLORE_RADIUS 5 
+#define EXPLORE_RADIUS 2 
 #define BLOCK_SIZE 1
 #define STEP_SIZE 1
 #define UNITS_PER_STEP 1

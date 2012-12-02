@@ -1,3 +1,9 @@
+/*
+@author Snow Li
+@date 12-1-12
+
+implements explore() a recurive search function that searches forward, left, right, and backwards in that order
+*/
 #include "explore.h"
 
 #define OUTPUT_PATH
@@ -9,6 +15,7 @@ extern vector_t dirs_vec[4] = {{0,1},{-1,0},{0,-1},{1,0}};
 char *names[4] = {"NORTH", "WEST", "SOUTH", "EAST"};
 uint16_t move_number = 0;
 
+// @purpose - malloc memory for the virtual grid in which to store gathered information
 void initialize_grid()
 {
     // *4 because we could be starting anywhere in the grid, and this covers it so that we can go at least EXPLORE_RADIUS in any direction
