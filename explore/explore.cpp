@@ -7,6 +7,8 @@ implements explore() a recurive search function that searches forward, left, rig
 #include "explore.h"
 
 #define OUTPUT_PATH
+#define MANUAL_TURNS
+#define DEBUG_EXPLORE 
 
 extern char *grid = NULL;
 extern uint8_t curr_x = X_START;
@@ -188,7 +190,9 @@ void explore(int8_t x, int8_t y, int8_t dir)
     int8_t y1 = y + dirs_vec[dir1].y;
     if( is_in_bounds(x1, y1, dir1) )
     {
-        //rotateLeft(); TODO uncomment
+#ifdef MANUAL_TURNS
+        rotateLeft();
+#endif
         if(move_forward_block(x1, y1))
         {
 
@@ -223,14 +227,18 @@ void explore(int8_t x, int8_t y, int8_t dir)
             Serial.println(y);
 #endif
         }
-        //rotateLeft(); TODO uncomment
-        //rotateLeft(); TODO uncomment
+#ifdef MANUAL_TURNS
+        rotateLeft(); 
+        rotateLeft(); 
+#endif
     }
     else
     {
-        //rotateLeft(); TODO uncomment
-        //rotateLeft(); TODO uncomment
-        //rotateLeft(); TODO uncomment
+#ifdef MANUAL_TURNS
+        rotateLeft();
+        rotateLeft();
+        rotateLeft();
+#endif
     }
 
 
@@ -274,11 +282,11 @@ void explore(int8_t x, int8_t y, int8_t dir)
 #endif
         }
     }
-    /* TODO uncomment
+#ifdef MANUAL_TURNS
     rotateLeft();
     rotateLeft();
     rotateLeft();
-    */
+#endif
 
     //BACK
     int8_t dir3 = (dir+2)%4;
@@ -318,10 +326,10 @@ void explore(int8_t x, int8_t y, int8_t dir)
             Serial.println(y);
 #endif
         }
-        /* TODO uncomment
+#ifdef MANUAL_TURNS
         rotateLeft();
-        rotateLeft(); //TODO verify that this should actually be this 180 turn
-        */
+        rotateLeft(); 
+#endif
     }
 }
 
@@ -331,6 +339,6 @@ void interrupt_handler_explore()
     Serial.println("INTERRUPT!!");
 #endif
 
-    node_t *curr_node = (node_t *)(grid + curr_x + curr_y*EXPLORE_RADIUS*2);
+    node_t *curr_node = (node_t *)(grid + (curr_x + curr_y*EXPLORE_RADIUS*2)*sizeof(node_t));
     curr_node->is_obstructed = 1;
 }
