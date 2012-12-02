@@ -133,6 +133,7 @@ boolean Protocol::dump()
 			numDataBytes++;
 		}
 		
+		Serial.print(dim, DEC); Serial.print(",");
 		for(int i = 0; i < numDataBytes; i++)
 		{
 			char data = EEPROM.read((_startAddr+i+1)%START_ADDR_UPPER_BOUND);
