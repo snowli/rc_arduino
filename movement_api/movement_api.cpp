@@ -1,7 +1,7 @@
 /*
 Prototype Movement API. Provide rotate, unitForward, unitReverse.
 
-@author Sriram Jayakumar
+@author Sriram Jayakumar, Snow Li
 @date 11/10/2012
    */
 
@@ -138,6 +138,31 @@ static void straightenFromRight()
 }
 
 
+void rotateLeft()
+{
+	#ifdef MANUAL_ROTATE
+		digitalWrite(LEFT_LED, HIGH);
+		
+		boolean complete = false;
+		while(!complete)
+		{
+			//Complete when low
+			complete = !digitalRead(ROTATE_LEFT_COMPLETE);
+			
+			if(complete)
+			{
+				//Pushbutton debouncing
+				delay(1000);
+			}
+		}
+		
+		digitalWrite(LEFT_LED, LOW);
+	
+	#else
+		rotate(90);
+	#endif
+}
+
 /*
 Rotates counterclockwise to the specified angle, +/- 2 degree.
 
@@ -150,7 +175,7 @@ means counterclockwise, negative clockwise.
 -Error handling
 -Rotate clockwise
 */
-boolean rotate(int degree)
+static boolean rotate(int degree)
 {
   double start = getHeading();
 
@@ -205,5 +230,21 @@ boolean rotate(int degree)
   }
   
   return true;
+}
+
+void initialize()
+{
+	//Direction pins
+    pinMode(FORWARD_PIN, OUTPUT);
+    pinMode(REVERSE_PIN, OUTPUT);
+    pinMode(LEFT_PIN, OUTPUT);
+    pinMode(RIGHT_PIN, OUTPUT);
+	pinMode(ROTATE_LEFT_COMPLETE, INPUT);
+    directional_pins_off();
+
+	#ifndef MANUAL_ROTATE
+		//Compass
+		Wire.begin();
+	#endif
 }
 
