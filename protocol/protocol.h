@@ -10,8 +10,7 @@
 #define PROTOCOL_H
 
 #include "Arduino.h"
-#include "/usr/share/arduino/libraries/EEPROM/EEPROM.h"
-
+#include <EEPROM.h>
 class Protocol
 {
 	private:

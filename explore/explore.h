@@ -11,7 +11,8 @@
 #define X_START 1
 #define Y_START 0
 
-#include "/usr/share/arduino/libraries/movement_api/movement_api.h"
+#include <Arduino.h>
+#include "movement_api.h"
 
 struct node_t{
     // 0 not explored
@@ -26,7 +27,7 @@ extern char *grid;
 extern uint8_t curr_x;
 extern uint8_t curr_y;
 
-void intialize_grid();
+void initialize_grid();
 void free_grid();
 int move_forward_block(uint8_t x, uint8_t y);
 void move_backward_block();

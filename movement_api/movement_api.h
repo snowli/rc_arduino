@@ -8,6 +8,9 @@ Prototype Movement API. Provide rotate, unitForward, unitReverse.
 #ifndef _MOVEMENT_API_H_
 #define _MOVEMENT_API_H_
 
+#include <Arduino.h>
+#include <Wire.h>
+
 #define FORWARD_PIN 4
 #define REVERSE_PIN 5
 #define LEFT_PIN 6
@@ -15,9 +18,6 @@ Prototype Movement API. Provide rotate, unitForward, unitReverse.
 #define FRONT_BUMPER 3
 
 #define ROTATE_ALLOWABLE_MARGIN 20
-
-#include <Arduino.h>
-#include "/usr/share/arduino/libraries/Wire/Wire.h"
 
 //Compass hardware address
 //The Wire library uses 7-bit I2C addressing, rather than 8-bits
