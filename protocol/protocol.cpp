@@ -5,6 +5,8 @@
 */
 
 #include "protocol.h"
+#include "Arduino.h"
+#include "EEPROM.h"
 
 #define DIM_LOWER_BOUND 1
 #define DIM_UPPER_BOUND 90
@@ -131,6 +133,7 @@ boolean Protocol::dump()
 			numDataBytes++;
 		}
 		
+		Serial.print(dim, DEC); Serial.print(",");
 		for(int i = 0; i < numDataBytes; i++)
 		{
 			char data = EEPROM.read((_startAddr+i+1)%START_ADDR_UPPER_BOUND);

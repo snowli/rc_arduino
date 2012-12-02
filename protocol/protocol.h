@@ -10,7 +10,7 @@
 #define PROTOCOL_H
 
 #include "Arduino.h"
-#include <EEPROM.h>
+
 class Protocol
 {
 	private:
@@ -60,7 +60,7 @@ class Protocol
 		boolean flush();
 		
 		/*
-		@desc Dumps data to the serial port in a comma-separated list of bytes. An init(...) which returns true must be called before dump(). Behavior is undefined if a serial connection is not opened beforehand.
+		@desc Dumps data to the serial port in a comma-separated list of bytes. An init(...) which returns true must be called before dump(). Behavior is undefined if a serial connection is not opened beforehand. The first byte is the dimension. Subsequent bytes on the Serial line are data.
 		@out Whether the dump succeeded. The data in EEPROM must meet the format specification.
 		*/
 		boolean dump();
