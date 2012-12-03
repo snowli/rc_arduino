@@ -2,13 +2,13 @@
 @author Snow Li
 @date 12-1-12
 
-implements explore() a recurive search function that searches forward, left, right, and backwards in that order
 */
+
 #include "explore.h"
 
 #define OUTPUT_PATH
-#define MANUAL_TURNS
-#define DEBUG_EXPLORE 
+//#define MANUAL_TURNS
+//#define DEBUG_EXPLORE 
 
 extern char *grid = NULL;
 extern uint8_t curr_x = X_START;
@@ -29,18 +29,19 @@ void initialize_grid()
     node->is_explored = 1;
 
 #ifdef OUTPUT_PATH
-// 1st line is dimension of exploration grid
-// 2nd line is <move_number><start x coord><start y coord>
-Serial.println(EXPLORE_RADIUS*2);
-Serial.print(move_number);
-Serial.print(" ");
-Serial.print(X_START);
-Serial.print(" ");
-Serial.println(Y_START);
-move_number++;
+    // 1st line is dimension of exploration grid
+    // 2nd line is <move_number><start x coord><start y coord>
+    Serial.println(EXPLORE_RADIUS*2);
+    Serial.print(move_number);
+    Serial.print(" ");
+    Serial.print(X_START);
+    Serial.print(" ");
+    Serial.println(Y_START);
+    move_number++;
 #endif
 }
 
+// @purpose - free allocated memory for grid
 void free_grid()
 {
     free(grid);
@@ -95,12 +96,15 @@ int move_forward_block(int8_t x, int8_t y)
     }
     else
     {
-        //Serial.println("already explored");
+#ifdef DEBUG_EXPLORE 
+        Serial.println("already explored");
+#endif
         return 0;
     }
     
 }
 
+// @purpose - move the car backward by 1 block (where a block is an entire grid cell)
 void move_backward_block()
 {
     int steps = BLOCK_SIZE / STEP_SIZE;
@@ -116,7 +120,11 @@ void move_backward_block()
     }
 }
 
-// @return 1 in bounds, 0 out of bounds
+// @param x - x coordinate
+// @param y - y coordinate
+// @param dir - integer representation of direction faced
+// @return 1 if in bounds, otherwise 0 
+// @purpose - to check if x,y is within the grid efficiently using the dir provided
 int is_in_bounds(int8_t x, int8_t y, int8_t dir)
 {
     switch( dir )
@@ -140,6 +148,9 @@ int is_in_bounds(int8_t x, int8_t y, int8_t dir)
     return 0;
 }
 
+// @param x - x coord in virtual grid
+// @param y - y coord in virtual grid
+// @param dir - direction faced by the rc car currently
 void explore(int8_t x, int8_t y, int8_t dir)
 {   
     //FORWARD
@@ -333,12 +344,15 @@ void explore(int8_t x, int8_t y, int8_t dir)
     }
 }
 
+// @purpose - interrupt handler to mark a node as obstructed when a physical obstruction is detected by the real world car
 void interrupt_handler_explore()
 {
+
 #ifdef DEBUG_EXPLORE
     Serial.println("INTERRUPT!!");
 #endif
 
     node_t *curr_node = (node_t *)(grid + (curr_x + curr_y*EXPLORE_RADIUS*2)*sizeof(node_t));
     curr_node->is_obstructed = 1;
+
 }
