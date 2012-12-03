@@ -2,16 +2,31 @@
 @author Snow Li
 @date 12-1-12
 
-Header file defining the parameters of the virtual grid which the rc_car will logically explore
+Defines the parameters of the virtual grid which the rc_car will logically explore
 
-during exploration, default is to always begin in grid quadrant 1 i.e. x = EXPLORE_RADIUS and y = EXPLORE_RADIUS
+Notes:
+Virtual Grid Abstraction
+-a BLOCK is a cell's dimension in the virtual grid
+-a BLOCK is made up of multiple STEP's
+-a STEP can further be divided into UNIT's of calls to the movement api where a single UNIT is a single call to movement_api's unitForward()
+-the purpose of this abstraction is to more precisely back out from a grid cell that is determined to be obstructed, the more STEP's per BLOCK, the more precise the movement of the rc car
+-the default start location is x = EXPLORE_RADIUS and y = EXPLORE_RADIUS
+
+Search Algorithm i.e. explore
+-this algorithm is recursive and will explore neighboring cells in the following order, Forward, Left, Right, and Back
+-movement of the physical car is managed such that any exploration of a previously unexplored grid cell is done facing the grid cell, thus rotate calls are made generously to properly orient the car 
+-the coordinates of the grid cell currently being explored are made global so that any interrupts (due to obstructions) may inform any movement functions that the cell is now obstructed and should be retreated from
+-retreating from a cell is performed using unitReverse() of the movement api and the algorithms logic attempts to undo all completed STEP's forward, that is if a BLOCK is 5 steps and 3 steps have been completed when an interrupt occurrs during the 4th step, 3 steps back will be made by the algorithm to retreat from the obstructed block
+
+Memory Management
+-memory for the grid abstraction is allocated on call of initalize_grid()
 */
 
 #ifndef _EXPLORE_H_
 #define _EXPLORE_H_
 
 #define EXPLORE_RADIUS 2 
-#define BLOCK_SIZE 1
+#define BLOCK_SIZE 5
 #define STEP_SIZE 1
 #define UNITS_PER_STEP 1
 
@@ -22,12 +37,8 @@ during exploration, default is to always begin in grid quadrant 1 i.e. x = EXPLO
 #include <movement_api.h>
 
 struct node_t{
-    // 0 not explored
-    // 1 explored
-    uint8_t is_explored;
-    // 0 not obstructed 
-    // 1 obstructed 
-    uint8_t is_obstructed;
+    uint8_t is_explored;    /* 0 if not explored, 1 otherwise */
+    uint8_t is_obstructed;  /* 0 if not obstructed, 1 otherwise */
 };
 
 struct vector_t{
