@@ -1,0 +1,67 @@
+TEST PLAN
+
+**Test Types**
+
+Since the system interacts heavily with the physical environment, we've 
+developed a testing system that abstracts different aspects of the real world 
+away.
+	1. Movements and Bumper Disabled. All physical movements 
+		are disabled. Instead, data is output to the Arduino Serial port in 
+		lieu of actual moves. This allows easy debugging. The tester can
+		pre-place obstacles and see how the algorithm reacts. This 
+		strategy is the equivalent of a simulator.
+	2. Some Movements Disabled. All movements except rotate are
+		disabled. A rotate is usually terminated by a user acknowledge. A side 
+		effect of this is that the moves get broken up, which is why rotate is
+		enabled in this case. Bumper interrupts are enabled, and having the 
+		moves broken up leaves time for the tester to hit the bumper.
+	3. Fast Rotate. All movements are enabled. However, rotates are performed
+		manually to speed them up.
+	4. Normal Operation.
+	
+**Tools**
+
+Two parsers make interpreting what the car is doing easier.
+
+DfsParser -- Converts where the car has visited to a user friendly format.
+Parser -- Visualize obstacles encountered by the car.
+
+**Relevant Preprocessor Flags**
+explore.h
+	#define EXPLORE_RADIUS 2 -- Vary how many blocks the car explores.
+
+explore.cpp
+	#define OUTPUT_PATH -- Output data on where the car is visiting to the 
+		serial port. Pass this data to DfsParser.
+	#define MANUAL_TURNS -- Enables the car to do its own turns.
+	#define DEBUG_EXPLORE -- Dump other debug data to the serial port.
+	
+
+movement_api.h
+	#define MANUAL_ROTATE -- Rather than using the compass as feedback and
+		having the car turn itself, have the user turn the car. An LED
+		indicates the car wants to be turned. A pushbutton tells the car
+		a turn is complete.
+
+**Procedure**
+
+Type 1
+	-Enable: OUTPUT_PATH
+	-Disable: MANUAL_TURNS, DEBUG_EXPLORE
+	-Be sure to disable interrupts in this scenario, because noise will
+	trigger the interrupts.
+	
+	To place obstacles, modify the place_obstacles() function in 
+	the obstacles_test.cpp sketch.
+	
+**Test Cases**
+
+Type 1
+	alley, left, unreachable, empty 6x6
+	
+	To interpret the results in results.txt:
+		-In the diagram with 1s and 0s, 1s represent obstacles detected
+		-In the other, the numbers represent the order in which blocks
+		are visited. Blocks can be visited multiple times.
+	
+	

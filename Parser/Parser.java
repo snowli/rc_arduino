@@ -1,5 +1,9 @@
 /*
-
+@author Sriram Jayakumar
+@date 12/2/2012
+@ver 0
+@desc Parses and displays output meeting the format produced by protocol.cpp.
+See usage() below and protocol.cpp for more details.
 @improvements
 	-Handle bad user input gracefully.
 	-Accurately display unexplored areas of the grid, if a region is 
@@ -42,9 +46,6 @@ public class Parser
 				
 				System.out.println();
 			}
-			
-			
-			
 		}
 
 		else
@@ -63,8 +64,4 @@ public class Parser
 			"0 =< start* < dimension.\n" +
 			"<data>.length = ceil(pow(dimension,2)/8)");
 	}
-	
-	
-
-
 }

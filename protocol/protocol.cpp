@@ -66,23 +66,14 @@ boolean Protocol::write(boolean val)
 		if(!_written)
 		{
 			EEPROM.write(_currAddr, _dim);
-			_currAddr = _currAddr++%START_ADDR_UPPER_BOUND;
+			_currAddr = (_currAddr++)%START_ADDR_UPPER_BOUND;
 			
 			_written = true;
 		}
 		
 		
 		//Set the relevant bit, specified by _slot, to val.
-		//Round the result of the floating point pow(...) operation.
-		float additionFlt = val*pow(2,_slot);
-		int additionInt = (int)additionFlt;
-		if(additionFlt > (additionInt + 0.5))
-		{
-			additionInt++;
-		}
-		
-		
-		_currVal += additionInt;
+		_currVal += (val*(1 << _slot));
 		
 		if(_slot==7)
 		{
@@ -136,7 +127,7 @@ boolean Protocol::dump()
 		Serial.print(dim, DEC); Serial.print(",");
 		for(int i = 0; i < numDataBytes; i++)
 		{
-			char data = EEPROM.read((_startAddr+i+1)%START_ADDR_UPPER_BOUND);
+			uint8_t data = EEPROM.read((_startAddr+i+1)%START_ADDR_UPPER_BOUND);
 			Serial.print(data, DEC);
 			Serial.print(",");
 		}
