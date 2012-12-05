@@ -1,1 +1,64 @@
 rc_arduino project
+
+##Authors##
+	Snow Li, Sriram Jayakumar
+
+
+##Synopsis##
+
+This project takes a rc (radio-control) car (or any vehicle with
+forward, reverse, left, and right controls) and builds an 
+exploration algorithm on top of it. Given a grid of space,
+the car does a depth-first-search of the space and returns
+where any obstacles are.
+
+##Files##
+
+movement_api -- Provides rotate90Degrees, unitStepForward, and 
+	unitStepReverse functionality for the car.
+explore -- Contains the dfs algorithm.
+application -- Top level sketch to load into the Arduino.
+protocol -- Library for writing obstacle data to EEPROM.
+Parser -- Reads obstacle data output from Arduino
+
+
+##Bugs##
+
+-Due to the movement surface being uneven, unitStepForward may
+move slightly different distances on each call.
+
+
+
+##Design##
+
+The exploration algorithm is a dfs. The data format for storage
+on EEPROM uses each bit to indicate the presence or absence of an
+obstacle. 
+
+##See Also##
+"test plan.txt" -- Describes how the system was tested. Use obstacles_test.cpp
+to load tests.
+
+##Procedure##
+-Place the movement_api, explore, app, and protocol libraries in the
+Arduino Libraries directory.
+-Set the appropriate header defines. Don't define anything other
+debugging flags. Change the EEPROM addresses periodically so you're
+not banging on the same spaces each time.
+	#define MANUAL_TURNS in explore.cpp
+	#define MANUAL_ROTATE in movement_api.h
+	#define EXPLORE_RADIUS in explore.h
+	#define BLOCK_SIZE to set the number of unit steps/block
+	#define START_ADDR to the relevant address in app.h
+-Load app.cpp onto the Arduino.
+-Run the algorithm. The starting point in the grid is always
+(Explore Radius, Explore Radius) 0-indexed.
+-Get the data on the serial port by loading downloader.cpp onto
+the Arduino.
+
+
+##Improvements##
+-More efficient exploration algorithm
+-Better hardware that rotates and moves quickly and consistently
+-Make the algorithm more efficient so that it doesn't rotate
+so often

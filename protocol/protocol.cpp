@@ -22,7 +22,7 @@ Protocol::Protocol()
 	_dim = 0;
 }
 
-boolean Protocol::init(char dim, int startAddr)
+boolean Protocol::init(uint8_t dim, int startAddr)
 {
 	if(dim < DIM_LOWER_BOUND || dim > DIM_UPPER_BOUND || startAddr < START_ADDR_LOWER_BOUND || startAddr > START_ADDR_UPPER_BOUND || _initialized)
 	{
@@ -108,7 +108,7 @@ boolean Protocol::flush()
 
 boolean Protocol::dump()
 {
-	char dim = EEPROM.read(_startAddr);
+	uint8_t dim = EEPROM.read(_startAddr);
 	
 	if(dim < DIM_LOWER_BOUND || dim > DIM_UPPER_BOUND || !_initialized)
 	{

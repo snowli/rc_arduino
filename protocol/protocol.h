@@ -19,7 +19,7 @@ class Protocol
 		boolean _written;
 		
 		//**Array**
-		char _dim;
+		uint8_t _dim;
 		
 		//**EEPROM**
 		int _startAddr;
@@ -33,7 +33,7 @@ class Protocol
 		
 	public:
 		/*
-		@desc. Provides read and write access to an nxn array of booleans stored in EEPROM. See init(char dim, int startAddr) for how Protocol instances will differ. The first byte stores the dimesnion n of the array. Subsequent bits store booleans, row by row. In any particular byte, the LSB stores the first entry.
+		@desc. Provides read and write access to an nxn array of booleans stored in EEPROM. See init(uint8_t dim, int startAddr) for how Protocol instances will differ. The first byte stores the dimesnion n of the array. Subsequent bits store booleans, row by row. In any particular byte, the LSB stores the first entry.
 		@future improvements
 			-Allow 
 				rectangular arrays.
@@ -51,7 +51,7 @@ class Protocol
 			-startAddr The address in EEPROM to start writing data at. This makes it somewhat easier to avoid writing the same addresses of EEPROM each time. 0 <= startAddr <= 1024 must hold true.
 		@out Whether the initialization was successful. This depends on valid input.
 		*/
-		boolean init(char dim, int startAddr);
+		boolean init(uint8_t dim, int startAddr);
 		
 		/*
 		@desc Flushes any outstanding data to EEPROM, since there are no guarantees on when data is written. An init(...) and write(...), both of which return true, must be called before flush(). This must be called when all writes are finished to guarantee everything is pushed to EEPROM.
