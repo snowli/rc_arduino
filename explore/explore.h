@@ -26,9 +26,12 @@ Memory Management
 #define _EXPLORE_H_
 
 #define EXPLORE_RADIUS 2 
-#define BLOCK_SIZE 5
+#define BLOCK_SIZE 1
 #define STEP_SIZE 1
 #define UNITS_PER_STEP 1
+#define BITS_PER_NODE 2
+#define OBSTRUCTED_BIT_OFFSET 1
+#define EXPLORED_BIT_OFFSET 0
 
 #define X_START EXPLORE_RADIUS 
 #define Y_START EXPLORE_RADIUS
@@ -47,9 +50,13 @@ struct vector_t{
 };
 
 extern vector_t dirs_vec[4];
-extern char *grid;
+extern uint8_t *grid;
 extern uint8_t curr_x;
 extern uint8_t curr_y;
+
+void set_bit(uint16_t bit_index);
+uint8_t get_bit(uint16_t bit_index);
+uint16_t virt_to_bit_index(uint16_t x, uint16_t y);
 
 void initialize_grid();
 void free_grid();

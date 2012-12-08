@@ -14,8 +14,7 @@ void insert_obstacles()
 	{
 		if(i%dim == 1 && i != 13)
 		{
-			node_t *n = (node_t *)(grid+i*sizeof(node_t));
-			n->is_obstructed = 1;
+            set_bit( i*BITS_PERNODE + OBSTRUCTED_BIT_OFFSET );
 		}
     }
 }

@@ -2,6 +2,8 @@
 @author Snow Li
 @date 12-1-12
 
+TODO implement odd by odd ability
+TODO implement check for move before turning
 */
 
 #include "explore.h"
@@ -10,23 +12,49 @@
 //#define MANUAL_TURNS
 //#define DEBUG_EXPLORE 
 
-extern char *grid = NULL;
+extern uint8_t *grid = NULL;
 extern uint8_t curr_x = X_START;
 extern uint8_t curr_y = Y_START;
 extern vector_t dirs_vec[4] = {{0,1},{-1,0},{0,-1},{1,0}};
 char *names[4] = {"NORTH", "WEST", "SOUTH", "EAST"};
 uint16_t move_number = 0;
 
+void set_bit(uint16_t bit_index)
+{
+    uint16_t byte_offset = bit_index >> 3;
+    //Serial.print("byte_offset:");
+    //Serial.println(byte_offset);
+    uint8_t bit_offset = 7 - (bit_index%8);
+    //Serial.print("bit_offset:");
+    //Serial.println(bit_offset);
+    uint8_t *byte = grid + byte_offset;
+    uint8_t to_or = 1 << bit_offset;
+    *byte |= to_or;
+    //Serial.print("A:");
+    //Serial.println( *byte);
+}
+
+uint8_t get_bit(uint16_t bit_index)
+{
+    uint16_t byte_offset = bit_index >> 3;
+    uint8_t bit_offset = 7 - (bit_index%8);
+    uint8_t *byte = grid + byte_offset;
+    return (*byte & (1 << bit_offset))>>bit_offset;
+}
+
+uint16_t virt_to_bit_index(uint16_t x, uint16_t y)
+{
+    return (x + y*EXPLORE_RADIUS*2)*BITS_PER_NODE;
+}
+
 // @purpose - malloc memory for the virtual grid in which to store gathered information
 void initialize_grid()
 {
-    // *4 because we could be starting anywhere in the grid, and this covers it so that we can go at least EXPLORE_RADIUS in any direction
-    grid = (char *)malloc( sizeof(node_t) * EXPLORE_RADIUS * EXPLORE_RADIUS * 4);
-    memset(grid, 0, sizeof(node_t) * EXPLORE_RADIUS*EXPLORE_RADIUS*4);
+    grid = (uint8_t *)malloc( BITS_PER_NODE * EXPLORE_RADIUS * EXPLORE_RADIUS / 2);
+    memset(grid, 0, BITS_PER_NODE * EXPLORE_RADIUS * EXPLORE_RADIUS / 2);
 
     // set the start position to status explored
-    node_t *node = (node_t *)(grid +(X_START + Y_START*EXPLORE_RADIUS*2)*sizeof(node_t));
-    node->is_explored = 1;
+    set_bit( virt_to_bit_index(X_START, Y_START) + EXPLORED_BIT_OFFSET);
 
 #ifdef OUTPUT_PATH
     // 1st line is dimension of exploration grid
@@ -58,9 +86,11 @@ int move_forward_block(int8_t x, int8_t y)
     int steps = BLOCK_SIZE / STEP_SIZE;
     int i;
     int j;
-    node_t *node = (node_t *)(grid + (x + y*EXPLORE_RADIUS*2)*sizeof(node_t));
-    
-    if( !(node->is_explored) )
+
+    uint16_t bit_index = virt_to_bit_index(x, y);
+    uint8_t is_explored = get_bit(bit_index + EXPLORED_BIT_OFFSET);
+
+    if( !is_explored )
     {
 
 #ifdef DEBUG_EXPLORE
@@ -70,12 +100,13 @@ int move_forward_block(int8_t x, int8_t y)
         Serial.println(y);
 #endif
 
-        node->is_explored = 1;
+        set_bit(bit_index + EXPLORED_BIT_OFFSET);
+
         for( i=0; i<steps; i++)
         {
             for( j=0; j<UNITS_PER_STEP; j++)
             {
-                if((node->is_obstructed))
+                if( get_bit(bit_index + OBSTRUCTED_BIT_OFFSET) )
                 {
 #ifdef DEBUG_EXPLORE
                     Serial.println("OBSTRUCTION FOUND");
@@ -352,7 +383,5 @@ void interrupt_handler_explore()
     Serial.println("INTERRUPT!!");
 #endif
 
-    node_t *curr_node = (node_t *)(grid + (curr_x + curr_y*EXPLORE_RADIUS*2)*sizeof(node_t));
-    curr_node->is_obstructed = 1;
-
+    set_bit( virt_to_bit_index(curr_x, curr_y) + OBSTRUCTED_BIT_OFFSET );
 }
