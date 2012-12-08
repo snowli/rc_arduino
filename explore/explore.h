@@ -13,13 +13,14 @@ Virtual Grid Abstraction
 -the default start location is x = EXPLORE_RADIUS and y = EXPLORE_RADIUS
 
 Search Algorithm i.e. explore
--this algorithm is recursive and will explore neighboring cells in the following order, Forward, Left, Right, and Back
+-this algorithm is recursive and will explore neighboring cells in the following order: Forward, Left, Right, and Back
 -movement of the physical car is managed such that any exploration of a previously unexplored grid cell is done facing the grid cell, thus rotate calls are made generously to properly orient the car 
 -the coordinates of the grid cell currently being explored are made global so that any interrupts (due to obstructions) may inform any movement functions that the cell is now obstructed and should be retreated from
--retreating from a cell is performed using unitReverse() of the movement api and the algorithms logic attempts to undo all completed STEP's forward, that is if a BLOCK is 5 steps and 3 steps have been completed when an interrupt occurrs during the 4th step, 3 steps back will be made by the algorithm to retreat from the obstructed block
+-retreating from a cell is performed using unitReverse() of the movement api and the algorithms logic attempts to undo all completed STEP's forward, that is, if a BLOCK is 5 steps and 3 steps have been completed when an interrupt occurrs during the 4th step, 3 steps back will be made by the algorithm to retreat from the obstructed block
 
 Memory Management
 -memory for the grid abstraction is allocated on call of initalize_grid()
+-each grid cell is represented as 2 bits, the higher order bit is reserved for marking an already explored cell and the lower order bit represents whether a cell is obstructed or not
 */
 
 #ifndef _EXPLORE_H_
@@ -38,11 +39,6 @@ Memory Management
 
 #include <Arduino.h>
 #include <movement_api.h>
-
-struct node_t{
-    uint8_t is_explored;    /* 0 if not explored, 1 otherwise */
-    uint8_t is_obstructed;  /* 0 if not obstructed, 1 otherwise */
-};
 
 struct vector_t{
     uint8_t x;

@@ -33,8 +33,7 @@ void loop()
         int i;
         for( i=0; i<EXPLORE_RADIUS*EXPLORE_RADIUS*4; i++)
         {
-            node_t *n = (node_t *)(grid+i*sizeof(node_t));
-            p.write(n->is_obstructed);
+            p.write( get_bit( i*BITS_PER_NODE + OBSTRUCTED_BIT_OFFSET) );
         }
         p.flush();
         free_grid();

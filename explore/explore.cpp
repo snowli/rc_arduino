@@ -2,7 +2,6 @@
 @author Snow Li
 @date 12-1-12
 
-TODO implement odd by odd ability
 TODO implement check for move before turning
 */
 
@@ -19,21 +18,18 @@ extern vector_t dirs_vec[4] = {{0,1},{-1,0},{0,-1},{1,0}};
 char *names[4] = {"NORTH", "WEST", "SOUTH", "EAST"};
 uint16_t move_number = 0;
 
+// @param bit_index - index into grid to be set to 1
 void set_bit(uint16_t bit_index)
 {
     uint16_t byte_offset = bit_index >> 3;
-    //Serial.print("byte_offset:");
-    //Serial.println(byte_offset);
     uint8_t bit_offset = 7 - (bit_index%8);
-    //Serial.print("bit_offset:");
-    //Serial.println(bit_offset);
     uint8_t *byte = grid + byte_offset;
     uint8_t to_or = 1 << bit_offset;
     *byte |= to_or;
-    //Serial.print("A:");
-    //Serial.println( *byte);
 }
 
+// @param bit_index- the index into grid array to return
+// @return - the bit at bit_index in grid
 uint8_t get_bit(uint16_t bit_index)
 {
     uint16_t byte_offset = bit_index >> 3;
@@ -42,6 +38,9 @@ uint8_t get_bit(uint16_t bit_index)
     return (*byte & (1 << bit_offset))>>bit_offset;
 }
 
+// @param x - virtual x coordinate
+// @param y - virtual y coordinate
+// @purpose - translates a virtual x,y coordinate into a bit offset
 uint16_t virt_to_bit_index(uint16_t x, uint16_t y)
 {
     return (x + y*EXPLORE_RADIUS*2)*BITS_PER_NODE;
